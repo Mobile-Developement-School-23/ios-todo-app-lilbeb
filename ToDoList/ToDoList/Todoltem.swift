@@ -38,27 +38,24 @@ struct TodoItem {
 
 
 extension TodoItem{
+    
     static func parse(json: Any) -> TodoItem? {
-        let data = Data(TodoItem.utf8)
         do {
-            guard let dictionary = try! JSONSerialization.jsonObject(with: Data((data as! String).utf8)) as? [String: Any] else
-            {return nil}
-            print(dictionary)
+            guard let dict = json as? [String: Any ] else { return nil }
             
-            guard let textId = dictionary["textId"] as? String,
-                  let text = dictionary["text"] as? String,
-                  let importance = dictionary["importance"] as? String,
-                  let isDone = dictionary["isDone"] as? Bool,
-                  let creationDate = (dictionary["creationDate"] as? Int)?.Date else {
+            guard let textId = dict["textId"] as? String,
+                  let text = dict["text"] as? String,
+                  let isDone = dict["isDone"] as? Bool,
+                  let creationDate = dict["creationDate"] as? Date else {
                 return nil
             }
-          var importance = Importance.usual
-          if let dictImportance = dictionary["importance"] as? String,
-             let dictImportance = Importance(rawValue: dictImportance) else{
-              return nil
-          }
-            let deadline = (dictionary["deadline"]as? Int)?.date
-            let modificationDate = (dictionary["modificationDate"]as? Int)?.date
+            var importance = Importance.usual
+            if let dictImportance = dict["importance"] as? String,
+                let dictImportance = Importance(rawValue: dictImportance) {
+                    importance = dictImportance
+                }
+            let deadline = dict["deadline"]as? Date
+            let modificationDate = dict["modificationDate"]as? Date
             
             return TodoItem(
                 taskId: taskId,
@@ -68,31 +65,29 @@ extension TodoItem{
                 creationDate: creationDate,
                 deadline: deadline,
                 modificationDate: modificationDate
+            )
+        }
     }
-                var json: Any {
-                    var dictionary: [String: Any] = [
-                        "taskId" = taskId
-                        "text" = text
-                        "importance" = deadline
-                        "isDone" = isDone
-                        "creationDate" = creationDate
-                        "deadline" = deadline
-                        "modificationDate" = modificationDate
-                        
-                    ]
-                    
-                    if let deadline = self.deadline {
-                        dictionary["deadline"] = deadline.stringRepresentation
-                    }
-                    
-                    return dictionary
-                }
-                }
-                }
-
-
-                
-class FileCache {
+    var json: Any {
+        var dictionary: [String: Any] = [
+            
+            "taskId" = taskId,
+            "text" = text,
+            "importance" = deadline,
+            "isDone" = isDone,
+            "creationDate" = creationDate,
+            "deadline" = deadline,
+            "modificationDate" = modificationDate,
+            
+        ]
+        
+        if let deadline = self.deadline {
+            dictionary["deadline"] = deadline.stringRepresentation
+        }
+        
+        return dictionary
+    }
+    
      var todoItems: [TodoItem]
      let fileName: String
      let fileManager = FileManager.default
@@ -147,7 +142,7 @@ class FileCache {
         }
     }
     
-    private func loadFromFile() {
+    private mutating func loadFromFile() {
         guard let path = getPath(),
               let jsonData = try? Data(contentsOf: path) else { return }
         do {
