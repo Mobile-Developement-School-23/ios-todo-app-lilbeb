@@ -43,7 +43,7 @@ extension TodoItem{
         do {
             guard let dict = json as? [String: Any ] else { return nil }
             
-            guard let textId = dict["textId"] as? String,
+            guard let taskId = dict["textId"] as? String,
                   let text = dict["text"] as? String,
                   let isDone = dict["isDone"] as? Bool,
                   let creationDate = dict["creationDate"] as? Date else {
@@ -60,10 +60,10 @@ extension TodoItem{
             return TodoItem(
                 taskId: taskId,
                 text: text,
-                importance: deadline,
+                importance: importance,
+                deadline: deadline,
                 isDone: isDone,
                 creationDate: creationDate,
-                deadline: deadline,
                 modificationDate: modificationDate
             )
         }
