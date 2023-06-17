@@ -73,7 +73,7 @@ extension TodoItem{
             
             "taskId" = taskId,
             "text" = text,
-            "importance" = deadline,
+            "importance" = importance,
             "isDone" = isDone,
             "creationDate" = creationDate,
             "deadline" = deadline,
