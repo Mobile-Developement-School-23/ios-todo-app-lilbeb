@@ -43,19 +43,16 @@ extension TodoItem {
         do {
             guard let dict = json as? [String: Any ] else { return nil }
             
-            guard let taskId = dict["textId"] as? String,
+            guard
+                  let taskId = dict["textId"] as? String,
                   let text = dict["text"] as? String,
-                  let isDone = dict["isDone"] as? Bool,
-                  let creationDate = dict["creationDate"] as? Date else {
+                  let creationDate = (dict["creationDate"] as? Int).flatMap ({ Date(timeIntervalSince1970: TimeInterval($0)) }) else {
                 return nil
             }
-            var importance = Importance.usual
-            if let dictImportance = dict["importance"] as? String,
-               let dictImportance = Importance(rawValue: dictImportance) {
-                importance = dictImportance
-            }
-            let deadline = dict["deadline"]as? Date
-            let modificationDate = dict["modificationDate"]as? Date
+            let importance = (dict["importance"] as? String).flatMap(Importance.init(rawValue:)) ?? .usual
+            let deadline = (dict["deadline"] as? Int).flatMap { Date(timeIntervalSince1970: TimeInterval($0)) }
+            let isDone = (dict["isDone"] as? Bool) ?? false
+            let modificationDate = (dict["modificationDate"] as? Int).flatMap { Date(timeIntervalSince1970: TimeInterval($0)) }
             
             return TodoItem(
                 taskId: taskId,
@@ -69,12 +66,35 @@ extension TodoItem {
         }
     }
     var json: Any {
-        var dictionary: [String: Any] = [
+        var dict: [String: Any] = [
             "text": text,
             "isDone": isDone,
-            "importance": importance.rawValue
+            "importance": importance.rawValue,
+            "deadline": deadline,
+            "isDone": isDone,
+            "creationDate": creationDate,
+            "modificationDate": modificationDate
         ]
-        return dictionary
+        return dict
     }
 }
 
+class FileCache {
+    
+    private(set) var toDoItems: [String: TodoItem] = [:]
+    
+    func addNewTask(_ item: TodoItem) -> TodoItem? {
+        let previousItem = toDoItems[item.taskId]
+        toDoItems[item.taskId] = item
+        return previousItem
+    }
+    
+    func deleteTask(_ taskId: String) -> TodoItem? {
+        let item = toDoItems[taskId]
+        toDoItems[taskId] = nil
+        return item
+    }
+    func save(to file: String) -> TodoItem? {
+        
+    }
+}
