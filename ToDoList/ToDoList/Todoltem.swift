@@ -67,6 +67,7 @@ extension TodoItem {
     }
     var json: Any {
         var dict: [String: Any] = [
+            "taskId": taskId,
             "text": text,
             "isDone": isDone,
             "importance": importance.rawValue,
@@ -81,20 +82,49 @@ extension TodoItem {
 
 class FileCache {
     
-    private(set) var toDoItems: [String: TodoItem] = [:]
-    
-    func addNewTask(_ item: TodoItem) -> TodoItem? {
-        let previousItem = toDoItems[item.taskId]
-        toDoItems[item.taskId] = item
-        return previousItem
+    private var todoItems = [TodoItem]()
+    private let fileManager = FileManager.default
+    private let encoder = JSONEncoder()
+    private let decoder = JSONDecoder()
+    private var fileName: String = ""
+
+    var allTodoItems: [TodoItem] {
+        return todoItems
+    }
+    func addTodoItem(_ item: TodoItem) {
+        if let index = todoItems.firstIndex(where: { $0.taskId == item.taskId }) {
+            todoItems[index] = item
+        } else {
+            todoItems.append(item)
+        }
+        save()
     }
     
-    func deleteTask(_ taskId: String) -> TodoItem? {
-        let item = toDoItems[taskId]
-        toDoItems[taskId] = nil
-        return item
+    func removeTodoItem(id: String) {
+        if let index = todoItems.firstIndex(where: { $0.taskId == id }) {
+            todoItems.remove(at: index)
+            save()
+        }
     }
-    func save(to file: String) -> TodoItem? {
-        
+    private func save() {
+        do {
+            let json = todoItems.map {$0.json}
+            let data = try JSONSerialization.data(withJSONObject: json)
+            let url = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let fileURL = url.appendingPathComponent(fileName)
+            try data.write(to: fileURL)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    private func load() {
+        do {
+            let url = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let fileURL = url.appendingPathComponent(fileName)
+            let data = try Data(contentsOf: fileURL)
+            let items = try JSONSerialization.data(withJSONObject: data)
+        } catch let error {
+            print(error.localizedDescription)
+        }
     }
 }
