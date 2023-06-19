@@ -47,7 +47,6 @@ extension TodoItem {
                   let taskId = dict["taskId"] as? String,
                   let text = dict["text"] as? String,
                   let creationDate = (dict["creationDate"] as? Int).flatMap ({ Date(timeIntervalSince1970: TimeInterval($0)) }) else {
-                print("1")
                 return nil
             }
             let importance = (dict["importance"] as? String).flatMap(Importance.init(rawValue:)) ?? .usual
@@ -91,11 +90,7 @@ class FileCache {
     private let fileManager = FileManager.default
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
-//    private var fileName: String = "biba"
 
-//    var allTodoItems: [TodoItem] {
-//        return todoItems
-//    }
     func addTodoItem(_ item: TodoItem) {
         if let index = todoItems.firstIndex(where: { $0.taskId == item.taskId }) {
             todoItems[index] = item
@@ -123,12 +118,7 @@ class FileCache {
     }
     public func load(to file: String) {
         do {
-//            let url = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-//            let fileURL = url.appendingPathComponent("\(fileName).json")
-//            let data = try Data(contentsOf: fileURL)
             if let data = try? Data(contentsOf: getUrl(file: file, fileExtension: "json")){
-//                let items = try JSONSerialization.data(withJSONObject: data)
-//                print(items)
                 if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]{
                     print(json)
                     var toDoItems2: [TodoItem] = []
@@ -141,8 +131,7 @@ class FileCache {
                                     }
                     todoItems = toDoItems2
                 }
-            } else { print(2) }
-            
+            }
         } catch let error {
             print(error.localizedDescription)
         }
@@ -150,7 +139,6 @@ class FileCache {
     private func getUrl(file: String, fileExtension: String) -> URL {
             var path = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             path = path.appendingPathComponent("\(file).\(fileExtension)")
-            //print(path) //путь к папке documentDirectory
             return path
         }
 }
