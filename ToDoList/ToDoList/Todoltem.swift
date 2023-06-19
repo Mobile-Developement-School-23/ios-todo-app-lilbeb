@@ -44,9 +44,10 @@ extension TodoItem {
             guard let dict = json as? [String: Any ] else { return nil }
             
             guard
-                  let taskId = dict["textId"] as? String,
+                  let taskId = dict["taskId"] as? String,
                   let text = dict["text"] as? String,
                   let creationDate = (dict["creationDate"] as? Int).flatMap ({ Date(timeIntervalSince1970: TimeInterval($0)) }) else {
+                print("1")
                 return nil
             }
             let importance = (dict["importance"] as? String).flatMap(Importance.init(rawValue:)) ?? .usual
@@ -66,65 +67,90 @@ extension TodoItem {
         }
     }
     var json: Any {
-        var dict: [String: Any] = [
-            "taskId": taskId,
-            "text": text,
-            "isDone": isDone,
-            "importance": importance.rawValue,
-            "deadline": deadline,
-            "isDone": isDone,
-            "creationDate": creationDate,
-            "modificationDate": modificationDate
-        ]
-        return dict
-    }
+           var res: [String: Any] = [:]
+           res["taskId"] = taskId
+           res["text"] = text
+           if importance != .usual {
+               res["importance"] = importance.rawValue
+           }
+           if let deadline = deadline {
+               res["deadline"] = Int(deadline.timeIntervalSince1970)
+           }
+           res["isDone"] = isDone
+           res["creationDate"] = Int(creationDate.timeIntervalSince1970)
+           if let modificationDate = modificationDate {
+               res["modificationDate"] = Int(modificationDate.timeIntervalSince1970)
+           }
+           return res
+       }
 }
 
 class FileCache {
     
-    private var todoItems = [TodoItem]()
+    private(set) var todoItems : [TodoItem] = []
     private let fileManager = FileManager.default
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
-    private var fileName: String = ""
+//    private var fileName: String = "biba"
 
-    var allTodoItems: [TodoItem] {
-        return todoItems
-    }
+//    var allTodoItems: [TodoItem] {
+//        return todoItems
+//    }
     func addTodoItem(_ item: TodoItem) {
         if let index = todoItems.firstIndex(where: { $0.taskId == item.taskId }) {
             todoItems[index] = item
         } else {
             todoItems.append(item)
         }
-        save()
     }
     
     func removeTodoItem(id: String) {
         if let index = todoItems.firstIndex(where: { $0.taskId == id }) {
             todoItems.remove(at: index)
-            save()
         }
     }
-    private func save() {
+    public func save(to file: String) {
         do {
             let json = todoItems.map {$0.json}
             let data = try JSONSerialization.data(withJSONObject: json)
             let url = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let fileURL = url.appendingPathComponent(fileName)
+            print(url)
+            let fileURL = url.appendingPathComponent("\(file).json")
             try data.write(to: fileURL)
         } catch let error {
             print(error.localizedDescription)
         }
     }
-    private func load() {
+    public func load(to file: String) {
         do {
-            let url = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let fileURL = url.appendingPathComponent(fileName)
-            let data = try Data(contentsOf: fileURL)
-            let items = try JSONSerialization.data(withJSONObject: data)
+//            let url = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+//            let fileURL = url.appendingPathComponent("\(fileName).json")
+//            let data = try Data(contentsOf: fileURL)
+            if let data = try? Data(contentsOf: getUrl(file: file, fileExtension: "json")){
+//                let items = try JSONSerialization.data(withJSONObject: data)
+//                print(items)
+                if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]{
+                    print(json)
+                    var toDoItems2: [TodoItem] = []
+                                    for i in json {
+                                        if let item = TodoItem.parse(json: i) {
+                                            toDoItems2.append(item)
+                                            
+                                        }
+                                        
+                                    }
+                    todoItems = toDoItems2
+                }
+            } else { print(2) }
+            
         } catch let error {
             print(error.localizedDescription)
         }
     }
+    private func getUrl(file: String, fileExtension: String) -> URL {
+            var path = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            path = path.appendingPathComponent("\(file).\(fileExtension)")
+            //print(path) //путь к папке documentDirectory
+            return path
+        }
 }
