@@ -103,25 +103,13 @@ class ToDoViewController: UIViewController {
         updateSwitch()
     }
     @objc private func updateSwitch() {
-        if deadlineSwitch.isOn == true {
-            UIView.animate(withDuration: 0.5) {
-                self.dateLabel.isHidden = !self.deadlineSwitch.isOn
-                self.toDoItems.deadline = Date(timeIntervalSinceNow: 60*60*24)
-            }
-        } else {
-            UIView.animate(withDuration: 0.5) {
-                self.dateLabel.isHidden = !self.deadlineSwitch.isOn
-                self.deadlinePicker.isHidden = !self.deadlineSwitch.isOn
-                self.toDoItems.deadline = nil
-            }
-        }
-    }
+        
 }
 
 private extension ToDoViewController {
     
     func setUpView() {
-        view.backgroundColor = UIColor(named: "Back")
+        view.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         
     }
     
@@ -207,7 +195,6 @@ private extension ToDoViewController {
         let deadlineSwitch = UISwitch()
         deadlineSwitch.isEnabled = false
         deadlineSwitch.setOn(false, animated: true)
-        deadlineSwitch.addTarget(self, action: #selector(updateSwitch), for: .valueChanged)
         
         return deadlineSwitch
     }
@@ -236,7 +223,7 @@ private extension ToDoViewController {
         button.setTitleColor(.red, for: .normal)
         button.setTitleColor(.gray, for: .disabled)
         button.layer.cornerRadius = 16
-        button.backgroundColor = UIColor(named: "BackSecondary")
+        button.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         button.isEnabled = false
 
         return button
