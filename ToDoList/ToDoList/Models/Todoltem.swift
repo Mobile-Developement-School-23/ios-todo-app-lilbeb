@@ -18,7 +18,7 @@ struct TodoItem {
     let taskId: String
     let text: String
     let importance: Importance
-    let deadline: Date?
+    var deadline: Date?
     let isDone: Bool
     let creationDate: Date
     let modificationDate: Date?
