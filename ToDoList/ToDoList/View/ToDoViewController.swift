@@ -23,9 +23,6 @@ class ToDoViewController: UIViewController {
     private let optionView = optionViewFunc()
     private let calendarView = calendarViewFunc()
     private let importanceSep = importanceSepFunc()
-
-    var cancelButton: UIBarButtonItem?
-    var saveButton: UIBarButtonItem?
     
     private var deadlineDate: Date? {
         didSet{
@@ -55,18 +52,31 @@ class ToDoViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-//    MARK: - ViewDidload
+    
+    private func setupNavigationBar() {
+        let saveButton = UIBarButtonItem(title: "Сохранить",
+                                         style: .done,
+                                         target: self,
+                                         action: nil)
+        let cancelButton = UIBarButtonItem(title: "Отменить",
+                                           style: .plain,
+                                           target: self,
+                                           action: #selector(cancel))
+        navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.rightBarButtonItem = saveButton
+    }
+    
+//    MARK: - ViewDidLoad
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
+
         view.backgroundColor = UIColor(red: 0.97, green: 0.97, blue: 0.95, alpha: 1.0)
         title = "Дело"
         tapGestureRecognizer.isEnabled = false
         view.addGestureRecognizer(tapGestureRecognizer)
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .done, target: self, action: nil)
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(cancel))
         
         subscribeToKeyboard()
         
@@ -287,31 +297,7 @@ private extension ToDoViewController {
         
     }
     
-    func setupNavigationBar() {
-        let attributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.font: 17
-        ]
-        navigationController?.navigationBar.titleTextAttributes = attributes
-        title = "Дело"
-        let cancelButton = UIBarButtonItem(
-            title: "Отменить",
-            style: .plain,
-            target: self,
-            action: #selector(cancel)
-        )
-        
-        let saveButton = UIBarButtonItem(
-            title: "Сохранить",
-            style: .done,
-            target: self,
-            action: nil
-        )
-        navigationItem.leftBarButtonItem = cancelButton
-        navigationItem.rightBarButtonItem = saveButton
-        navigationItem.leftBarButtonItem?.tintColor = .blue
-        navigationItem.rightBarButtonItem?.tintColor = .blue
-    }
-    
+
     static func textLabelFunc() -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -354,7 +340,7 @@ private extension ToDoViewController {
     }
     
     static func importanceControlFunc() -> UISegmentedControl {
-        let importanceSegment = UISegmentedControl(items: [UIImage(named: "low")!, "нет", "‼️"])
+        let importanceSegment = UISegmentedControl(items: ["↓", "нет", "‼️"])
         importanceSegment.selectedSegmentIndex = 2
         importanceSegment.translatesAutoresizingMaskIntoConstraints = false
         

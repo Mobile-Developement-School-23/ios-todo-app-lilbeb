@@ -19,8 +19,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = ToDoViewController()
-//        window?.rootViewController = ColorPickerViewController()
+        let start = ToDoViewController()
+        let navigation = UINavigationController(rootViewController: start)
+        window?.rootViewController = navigation
         window?.makeKeyAndVisible()
     }
 
