@@ -10,6 +10,9 @@
 		17F9EE12C808E874DBBF5663 /* Pods_ToDoListTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE2D56C67DAEB08877F3CDA /* Pods_ToDoListTests.framework */; };
 		20A9036F45B2D7BF4F600F1C /* Pods_ToDoList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E62AFD3B6117CBF2C624667B /* Pods_ToDoList.framework */; };
 		3204B5522A4F6A2900E46938 /* CocoaLumberjack in Frameworks */ = {isa = PBXBuildFile; productRef = 3204B5512A4F6A2900E46938 /* CocoaLumberjack */; };
+		3204B5542A4F8AC400E46938 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3204B5532A4F8AC400E46938 /* MainViewController.swift */; };
+		3204B5652A4F9F2000E46938 /* SF-Pro-Display-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3204B55F2A4F9F1F00E46938 /* SF-Pro-Display-Bold.otf */; };
+		3204B5692A4F9F2000E46938 /* SF-Pro-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3204B5632A4F9F2000E46938 /* SF-Pro-Display-Regular.otf */; };
 		329DF49F2A45FA73000D8BCE /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 329DF49E2A45FA73000D8BCE /* DateExtension.swift */; };
 		329DF4A12A462253000D8BCE /* ToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 329DF4A02A462253000D8BCE /* ToDoViewController.swift */; };
 		32B99FC32A3A6E6B00600106 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B99FC22A3A6E6B00600106 /* AppDelegate.swift */; };
@@ -43,6 +46,11 @@
 /* Begin PBXFileReference section */
 		24AACDD0FEA120D928C90756 /* Pods-ToDoList-ToDoListUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList-ToDoListUITests.release.xcconfig"; path = "Target Support Files/Pods-ToDoList-ToDoListUITests/Pods-ToDoList-ToDoListUITests.release.xcconfig"; sourceTree = "<group>"; };
 		24B9B72CB90A85C78FB080C6 /* Pods_ToDoList_ToDoListUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDoList_ToDoListUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3204B5532A4F8AC400E46938 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		3204B55F2A4F9F1F00E46938 /* SF-Pro-Display-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Bold.otf"; sourceTree = "<group>"; };
+		3204B5632A4F9F2000E46938 /* SF-Pro-Display-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Display-Regular.otf"; sourceTree = "<group>"; };
+		3204B56B2A4FA2F700E46938 /* SFProText-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFProText-Semibold.ttf"; sourceTree = "<group>"; };
+		3204B56C2A4FA35200E46938 /* SFProDisplay-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFProDisplay-Bold.otf"; sourceTree = "<group>"; };
 		329DF49E2A45FA73000D8BCE /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		329DF4A02A462253000D8BCE /* ToDoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoViewController.swift; sourceTree = "<group>"; };
 		32B99FBF2A3A6E6B00600106 /* ToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,6 +113,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		3204B55E2A4F9F0B00E46938 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				3204B56C2A4FA35200E46938 /* SFProDisplay-Bold.otf */,
+				3204B56B2A4FA2F700E46938 /* SFProText-Semibold.ttf */,
+				3204B55F2A4F9F1F00E46938 /* SF-Pro-Display-Bold.otf */,
+				3204B5632A4F9F2000E46938 /* SF-Pro-Display-Regular.otf */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
 		329DF49C2A45AD2D000D8BCE /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				329DF4A02A462253000D8BCE /* ToDoViewController.swift */,
+				3204B5532A4F8AC400E46938 /* MainViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -146,6 +166,7 @@
 		32B99FC12A3A6E6B00600106 /* ToDoList */ = {
 			isa = PBXGroup;
 			children = (
+				3204B55E2A4F9F0B00E46938 /* Font */,
 				329DF49D2A45BD57000D8BCE /* View */,
 				329DF49C2A45AD2D000D8BCE /* Models */,
 				32B99FC22A3A6E6B00600106 /* AppDelegate.swift */,
@@ -185,7 +206,6 @@
 				41754B615B791248B4871FA1 /* Pods-ToDoListTests.debug.xcconfig */,
 				80A77A16A6C530D64117189B /* Pods-ToDoListTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -304,6 +324,8 @@
 			files = (
 				32B99FCF2A3A6E6C00600106 /* LaunchScreen.storyboard in Resources */,
 				32B99FCC2A3A6E6C00600106 /* Assets.xcassets in Resources */,
+				3204B5692A4F9F2000E46938 /* SF-Pro-Display-Regular.otf in Resources */,
+				3204B5652A4F9F2000E46938 /* SF-Pro-Display-Bold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +422,7 @@
 				329DF4A12A462253000D8BCE /* ToDoViewController.swift in Sources */,
 				329DF49F2A45FA73000D8BCE /* DateExtension.swift in Sources */,
 				32B99FF62A3A6F5C00600106 /* Todoltem.swift in Sources */,
+				3204B5542A4F8AC400E46938 /* MainViewController.swift in Sources */,
 				32B99FC32A3A6E6B00600106 /* AppDelegate.swift in Sources */,
 				32B99FC52A3A6E6B00600106 /* SceneDelegate.swift in Sources */,
 			);
