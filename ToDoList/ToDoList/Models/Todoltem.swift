@@ -7,19 +7,20 @@
 import Foundation
 
 
+enum Importance: String {
+    case notImportant = "неважная"
+    case usual = "обычная"
+    case important = "важная"
+}
+
 struct TodoItem {
     
-    enum Importance: String {
-        case notImportant = "неважная"
-        case usual = "обычная"
-        case important = "важная"
-    }
    
     let taskId: String
     let text: String
     let importance: Importance
     var deadline: Date?
-    let isDone: Bool
+    var isDone: Bool
     let creationDate: Date
     let modificationDate: Date?
     
@@ -34,6 +35,11 @@ struct TodoItem {
         self.modificationDate = modificationDate
     }
 
+}
+
+private enum FileFormat: String {
+  case json = ".json"
+  case csv = ".csv"
 }
 
 
@@ -91,6 +97,7 @@ class FileCache {
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
 
+
     func addTodoItem(_ item: TodoItem) {
         if let index = todoItems.firstIndex(where: { $0.taskId == item.taskId }) {
             todoItems[index] = item
@@ -136,6 +143,29 @@ class FileCache {
             print(error.localizedDescription)
         }
     }
+    
+    func loadFromJSON(name: String) {
+      guard let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        print("Файл не найден")
+        return
+      }
+      let pathToFile = documentDirectory.appendingPathComponent(name + FileFormat.json.rawValue)
+      guard let data = try? Data(contentsOf: pathToFile) else {
+        print("Файл поврежден")
+        return
+      }
+      guard let jsonFile = try? JSONSerialization.jsonObject(with: data) as? [Any] else {
+        print("Не можем распарсить")
+        return
+      }
+      
+      for jsonItem in jsonFile {
+        if let parsedItem = TodoItem.parse(json: jsonItem) {
+            addTodoItem(parsedItem)
+        }
+      }
+    }
+    
     private func getUrl(file: String, fileExtension: String) -> URL {
             var path = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             path = path.appendingPathComponent("\(file).\(fileExtension)")

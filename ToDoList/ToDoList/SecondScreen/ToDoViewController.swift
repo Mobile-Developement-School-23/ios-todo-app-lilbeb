@@ -7,7 +7,10 @@
 
 import UIKit
 
+
 class ToDoViewController: UIViewController {
+   
+
     
     private var toDoItems = TodoItem(text: "", importance: .usual, isDone: false, creationDate: .now)
     private let textLabel = textLabelFunc()
@@ -64,6 +67,7 @@ class ToDoViewController: UIViewController {
                                            action: #selector(cancel))
         navigationItem.leftBarButtonItem = cancelButton
         navigationItem.rightBarButtonItem = saveButton
+        navigationController?.navigationBar.layoutMargins = UIEdgeInsets(top: 0, left: 32, bottom: 0, right: 0)
     }
     
 //    MARK: - ViewDidLoad
@@ -76,8 +80,6 @@ class ToDoViewController: UIViewController {
         title = "Дело"
         tapGestureRecognizer.isEnabled = false
         view.addGestureRecognizer(tapGestureRecognizer)
-        
-        
         subscribeToKeyboard()
         
         scrollView.keyboardDismissMode = .interactive
