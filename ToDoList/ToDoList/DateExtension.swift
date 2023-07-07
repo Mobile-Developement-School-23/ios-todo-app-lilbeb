@@ -5,15 +5,21 @@
 //  Created by Элина Борисова on 23.06.2023.
 //
 
-import Foundation
+import UIKit
 
-
-
-public extension Date {
-    var tomorrow: Date {
-        let today = Date()
-        let calendar = Calendar.current
-        let nextDay = calendar.date(byAdding: .day, value: 1 , to: today)
-        return today
-    }
+public func formatDayMonthYear(for date: Date?) -> String {
+  guard let date = date else { return "invalid date" }
+  let dateFormatter = DateFormatter()
+  dateFormatter.dateFormat = "d MMMM yyyy"
+  let dateString = dateFormatter.string(from: date)
+  return dateString
 }
+
+public func formatDayMonth(for date: Date?) -> String {
+  guard let date = date else { return "invalid date" }
+  let dateFormatter = DateFormatter()
+  dateFormatter.dateFormat = "d MMMM"
+  let dateString = dateFormatter.string(from: date)
+  return dateString
+}
+
