@@ -3,13 +3,12 @@
 import UIKit
 
 
-protocol TableViewCellDelegate: AnyObject {
-  func TableViewCellButton(_ taskCell: TableViewCell)
-}
-
 class TableViewCell: UITableViewCell {
     
     static let identifier = "TableViewCell"
+    lazy var attributedString: NSMutableAttributedString = .init(string: titleLabel.text ?? "")
+    weak var delegate: TableViewCellDelegate?
+
 
     private let taskStack: UIStackView = {
         let stackView = UIStackView()
@@ -45,8 +44,8 @@ class TableViewCell: UITableViewCell {
     }()
     private let deadlineLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        label.textColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.3)
+        label.font = UIFont.subhead
+        label.textColor = Colors.labelTertiary
         return label
     }()
     
@@ -60,20 +59,17 @@ class TableViewCell: UITableViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.textColor = UIColor(red: 0.97, green: 0.97, blue: 0.95, alpha: 1.0)
+        label.font = UIFont.body
+        label.textColor = Colors.labelPrimary
         label.numberOfLines = 3
         
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    lazy var attributedString: NSMutableAttributedString = .init(string: titleLabel.text ?? "")
-
-    weak var delegate: TableViewCellDelegate?
-
+    
     private let chevron: UIImageView = {
       let imageView = UIImageView()
-      imageView.image = UIImage(systemName: "chevron.right")
+      imageView.image = UIImage(named: "chevron")
         
       imageView.translatesAutoresizingMaskIntoConstraints = false
       return imageView
@@ -81,7 +77,7 @@ class TableViewCell: UITableViewCell {
     
     private let status: UIImageView = {
       let imageView = UIImageView()
-      imageView.image = UIImage(systemName: "circle")
+      imageView.image = UIImage(named: "greyCircle")
         
       imageView.translatesAutoresizingMaskIntoConstraints = false
       return imageView
@@ -99,7 +95,7 @@ class TableViewCell: UITableViewCell {
     }()
     private lazy var statusButton: UIButton = {
       let button = UIButton()
-      button.setImage(UIImage(systemName: "circle"), for: .normal)
+      button.setImage(UIImage(named: "greyCircle"), for: .normal)
       button.addTarget(self, action: #selector(statusButtonTapped), for: .touchUpInside)
       button.frame.size = CGSize(width: 24, height: 24)
         
@@ -109,10 +105,9 @@ class TableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
       super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-      separatorInset = UIEdgeInsets(top: 0, left: 52, bottom: 0, right: 0)
-        backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-
+        backgroundColor = Colors.backSecondary
+        separatorInset = UIEdgeInsets(top: 0, left: 52, bottom: 0, right: 0)
+        
       setupUI()
     }
     
@@ -147,7 +142,7 @@ class TableViewCell: UITableViewCell {
         titleStack.addArrangedSubview(statusIcon)
         titleStack.addArrangedSubview(titleLabel)
       case .notImportant:
-        statusIcon.image = UIImage(systemName: "arrow.down")
+        statusIcon.image = UIImage(named: "arrowDown")
         titleStack.addArrangedSubview(statusIcon)
         titleStack.addArrangedSubview(titleLabel)
       default:
@@ -158,7 +153,7 @@ class TableViewCell: UITableViewCell {
         taskStack.addArrangedSubview(deadlneStack)
         calendarImage.image = UIImage(systemName: "calendar")
         deadlneStack.addArrangedSubview(calendarImage)
-        deadlineLabel.text = formatDayMonth(for: deadline)
+        deadlineLabel.text = formatDayMonthYear(for: deadline)
         deadlneStack.addArrangedSubview(deadlineLabel)
       }
 
@@ -170,7 +165,7 @@ class TableViewCell: UITableViewCell {
           value: 1,
           range: NSMakeRange(0, attributeString.length)
         )
-          titleLabel.textColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.3)
+          titleLabel.textColor = Colors.labelTertiary
         titleLabel.attributedText = attributedString
         titleStack.addArrangedSubview(titleLabel)
       }

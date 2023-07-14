@@ -2,32 +2,33 @@
 
 import UIKit
 
-protocol headerViewDelegate: AnyObject {
-  func showHideButtonTapped(_ sender: UIButton)
-}
 
-class headerView: UIView {
-    weak var delegate: headerViewDelegate?
+class HeaderView: UIView {
+    weak var delegate: HeaderViewDelegate?
 
     let isDoneCountLabel: UILabel = {
-      let label = UILabel()
-      label.text = "Выполнено - 0)"
-      label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        label.textColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.3)
-        
-      label.translatesAutoresizingMaskIntoConstraints = false
-      return label
+        let label = UILabel()
+        label.text = "Выполнено - 0)"
+        label.font = UIFont.subhead
+        label.textColor = Colors.labelTertiary
+
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     lazy var showHideButton: UIButton = {
-      let button = UIButton()
-      button.setTitle("Скрыть", for: .normal)
-        button.setTitleColor(UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0), for: .normal)
-      button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .medium)
-      button.addTarget(self, action: #selector(showHideButtonTapped), for: .touchUpInside)
-      button.translatesAutoresizingMaskIntoConstraints = false
-      return button
+        let button = UIButton()
+        button.setTitle("Скрыть", for: .normal)
+        button.setTitleColor(Colors.colorBlue, for: .normal)
+        button.titleLabel?.font = UIFont.subhead
+        button.addTarget(self, action: #selector(hideButtonPressed), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
+    
+    @objc private func hideButtonPressed(_ sender: UIButton) {
+      delegate?.hideButtonPressed(sender)
+    }
     
     override init(frame: CGRect) {
       super.init(frame: CGRect(x: 0, y: 0, width: frame.width, height: 40))
@@ -48,7 +49,4 @@ class headerView: UIView {
       fatalError("init(coder:) has not been implemented")
     }
 
-    @objc private func showHideButtonTapped(_ sender: UIButton) {
-      delegate?.showHideButtonTapped(sender)
-    }
 }
